@@ -659,8 +659,17 @@ def system_install (opts):
 
     opts['stage'] = 'system_install'
     distro_name = opts['distro_name']
-    if distro_name in opts['config']['requires'].keys():
+    distro_version = opts['distro_version']
+    do_install = False
+    if '{name}:{version}'.format(name=distro_name, version=distro_version) in opts['config']['requires'].keys():
+        distro_requires = opts['config']['requires']['{name}:{version}'.format(name=distro_name, version=distro_version)]
+        do_install = True
+
+    elif distro_name in opts['config']['requires'].keys():
         distro_requires = opts['config']['requires'][distro_name]
+        do_install = True
+
+    if do_install:
         if distro_requires:
             requires = ' '.join(distro_requires)
         else:
